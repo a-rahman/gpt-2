@@ -17,6 +17,7 @@ def save_model(
     length=5,
     temperature=1,
     top_k=0,
+    models_dir='models',
     text='What is this?'
 ):
     """
@@ -37,11 +38,12 @@ def save_model(
      while 40 means 40 words are considered at each step. 0 (default) is a
      special setting meaning no restrictions. 40 generally is a good value.
     """
+    models_dir = os.path.expanduser(os.path.expandvars(models_dir))
     if batch_size is None:
         batch_size = 1
     assert nsamples % batch_size == 0
 
-    enc = encoder.get_encoder(model_name)
+    enc = encoder.get_encoder(model_name, models_dir)
     hparams = model.default_hparams()
     with open(os.path.join('models', model_name, 'hparams.json')) as f:
         hparams.override_from_dict(json.load(f))
@@ -81,7 +83,7 @@ def save_model(
             export_dir = os.path.join('models', '0')
             builder = tf.saved_model.builder.SavedModelBuilder(export_dir)
             input_tensor = sess.graph.get_tensor_by_name('input:0')
-            output_tensor = sess.graph.get_tensor_by_name('sample_sequence/output/Exit_3:0')
+            output_tensor = sess.graph.get_tensor_by_name(output.name)
             model_input = tf.saved_model.build_tensor_info(input_tensor)
             model_output = tf.saved_model.build_tensor_info(output_tensor)
             signature_definition = tf.saved_model.signature_def_utils.build_signature_def(
@@ -98,4 +100,4 @@ def save_model(
         # tensorflow_model_server --port=9000 --model_name=0 --model_base_path=$(pwd)/models
 
 if __name__ == '__main__':
-    fire.Fire(interact_model)
+    fire.Fire(save_model)
