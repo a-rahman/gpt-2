@@ -80,7 +80,7 @@ def save_model(
             print(out)
 
             ### To save model as SavedModel ###
-            export_dir = os.path.join('models', '0')
+            export_dir = os.path.join('models', str(length))
             builder = tf.saved_model.builder.SavedModelBuilder(export_dir)
             input_tensor = sess.graph.get_tensor_by_name('input:0')
             output_tensor = sess.graph.get_tensor_by_name(output.name)
