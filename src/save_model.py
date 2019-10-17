@@ -76,7 +76,6 @@ def save_model(
             out = sess.run(output, feed_dict={
                 context: [context_tokens for _ in range(batch_size)]
             })[:, len(context_tokens):]
-            print(out)
 
             ### To save model as SavedModel ###
             export_dir = os.path.join('models', model_title, str(length))

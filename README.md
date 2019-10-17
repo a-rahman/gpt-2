@@ -1,3 +1,14 @@
+**Changes made for serving**
+
+To serve gpt-2 with tensorflow serving:
+- Install the [model server](https://www.tensorflow.org/tfx/serving/setup).
+- Install the python requirements from requirements.txt with `pip install -r requirements.txt`
+- Download the GPT-2 model with `python download_model.py 774M`
+- Convert the model to a servable form with `python src/save_model.py`
+- Serve the model by calling `./launch_server.sh`
+
+The default configurations for `save_model.py` have it generate 5 tokens for the given input.
+
 **Status:** Archive (code is provided as-is, no updates expected)
 
 # gpt-2
