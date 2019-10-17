@@ -10,7 +10,7 @@ import tensorflow as tf
 import model, sample, encoder
 
 def save_model(
-    model_name='345M',
+    model_name='774M',
     seed=None,
     nsamples=1,
     batch_size=1,
@@ -18,11 +18,12 @@ def save_model(
     temperature=1,
     top_k=0,
     models_dir='models',
-    text='What is this?'
+    text='What is this?',
+    model_title='short'
 ):
     """
-    Interactively run the model
-    :model_name=117M : String, which model to use
+    Save model into servable form
+    :model_name=774M : String, which model to use
     :seed=None : Integer seed for random number generators, fix seed to reproduce
      results
     :nsamples=1 : Number of samples to return total
@@ -69,10 +70,8 @@ def save_model(
         saver.restore(sess, ckpt)
 
         context_tokens = enc.encode(text)
-        print(context_tokens)
         generated = 0
         t0 = time.time()
-        # print(text)
         for _ in range(nsamples // batch_size):
             out = sess.run(output, feed_dict={
                 context: [context_tokens for _ in range(batch_size)]
@@ -80,7 +79,7 @@ def save_model(
             print(out)
 
             ### To save model as SavedModel ###
-            export_dir = os.path.join('models', str(length))
+            export_dir = os.path.join('models', model_title, str(length))
             builder = tf.saved_model.builder.SavedModelBuilder(export_dir)
             input_tensor = sess.graph.get_tensor_by_name('input:0')
             output_tensor = sess.graph.get_tensor_by_name(output.name)
@@ -97,7 +96,6 @@ def save_model(
                                                 signature_definition})
             builder.save()
             
-        # tensorflow_model_server --port=9000 --model_name=0 --model_base_path=$(pwd)/models
 
 if __name__ == '__main__':
     fire.Fire(save_model)
