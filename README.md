@@ -1,6 +1,6 @@
 **Changes made for serving**
 
-To serve gpt-2 with tensorflow serving:
+To serve GPT-2 with tensorflow serving:
 - Install the [model server](https://www.tensorflow.org/tfx/serving/setup).
 - Install the python requirements from requirements.txt with `pip install -r requirements.txt`
 - Download the GPT-2 model with `python download_model.py 774M`
